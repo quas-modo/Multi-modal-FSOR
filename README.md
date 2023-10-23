@@ -1,5 +1,5 @@
 # Multi-modal FSOR
-数据特征提取参考LibFewShot
+使用LibFewShot和miniImage进行数据特征提取
 ## semantic guided margin
 ### visualization
 t-SNE/PCA 数据降维

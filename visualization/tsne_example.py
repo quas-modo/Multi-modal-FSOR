@@ -18,6 +18,8 @@ X, y = digits.data, digits.target
 n_samples, n_features = X.shape
 print('X.shape: ')
 print(X.shape)
+print('y.shape: ')
+print(y.shape)
 print('n_samples: ')
 print(n_samples)
 print('n_features: ')
