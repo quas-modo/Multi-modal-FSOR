@@ -53,40 +53,40 @@ def draw_CAM(model, img_path, save_path, visual_heatmap=False):
         plt.axis('off')
         plt.show()
 
-# def returnCAM(feature_conv, weight_softmax, class_idx):
-#     # 确定特征图的形状
-#     # 假设 batch_size 总是 1，这是通常的情况，尤其是在单张图像处理中
-#     _, nc, h, w = feature_conv.shape  # 添加 _ 来接收批次维度
-#
-#     # 计算 CAM
-#     cam = weight_softmax[class_idx].dot(feature_conv.reshape((nc, h * w)))
-#     cam = cam.reshape(h, w)
-#     cam = np.maximum(cam, 0)  # 仅保留正激活
-#     cam_img = cam / np.max(cam)  # 归一化处理
-#     return cv2.resize(cam_img, (w, h))  # 调整大小以匹配输入图像尺寸
-
 def returnCAM(feature_conv, weight_softmax, class_idx):
-    _, nc, h, w = feature_conv.shape
+    # 确定特征图的形状
+    # 假设 batch_size 总是 1，这是通常的情况，尤其是在单张图像处理中
+    _, nc, h, w = feature_conv.shape  # 添加 _ 来接收批次维度
 
-    # 直接对特征图进行平均，而不是加权平均
-    cam = np.mean(feature_conv, axis=1)[0]  # 假设批大小为1，平均所有通道
+    # 计算 CAM
+    cam = weight_softmax[class_idx].dot(feature_conv.reshape((nc, h * w)))
+    cam = cam.reshape(h, w)
+    cam = np.maximum(cam, 0)  # 仅保留正激活
+    cam_img = cam / np.max(cam)  # 归一化处理
+    return cv2.resize(cam_img, (w, h))  # 调整大小以匹配输入图像尺寸
 
-    # 对结果进行非线性变换可以增强视觉效果
-    cam = np.maximum(cam, 0)
-    cam = np.sqrt(cam)  # 使用平方根可以增强低值区域的可见度
-    cam = np.sqrt(cam)
-    # cam = np.sqrt(cam)
-    # cam = np.sqrt(cam)
-    print(cam)
-    cam = cam - np.min(cam)
-    # cam = cam - np.min(cam)
-    cam_img = cam / np.max(cam)
-    cam_img = 1 - cam_img
-    return cv2.resize(cam_img, (w, h))
+# def returnCAM(feature_conv, weight_softmax, class_idx):
+#     _, nc, h, w = feature_conv.shape
+#
+#     # 直接对特征图进行平均，而不是加权平均
+#     cam = np.mean(feature_conv, axis=1)[0]  # 假设批大小为1，平均所有通道
+#
+#     # 对结果进行非线性变换可以增强视觉效果
+#     cam = np.maximum(cam, 0)
+#     cam = np.sqrt(cam)  # 使用平方根可以增强低值区域的可见度
+#     cam = np.sqrt(cam)
+#     # cam = np.sqrt(cam)
+#     # cam = np.sqrt(cam)
+#     print(cam)
+#     cam = cam - np.min(cam)
+#     # cam = cam - np.min(cam)
+#     cam_img = cam / np.max(cam)
+#     cam_img = 1 - cam_img
+#     return cv2.resize(cam_img, (w, h))
 
 
 
 
 # 加载预训练模型并指定设备
 model = models.resnet50(pretrained=True).cuda()
-draw_CAM(model, "bird.png", "heatmap.jpg")
+draw_CAM(model, "car.jpg", "heatmap_car.jpg")
